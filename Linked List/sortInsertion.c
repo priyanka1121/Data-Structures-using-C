@@ -1,147 +1,105 @@
-include <stdio.h> //not done
-#include<stdlib.h>
-
-struct node{
-    int data;
-    struct node *next;
-};
-
-int main()
-{
-    int choice =1;
-    struct node *newnode, *temp, *start;
-    start = NULL;
-    while(choice){
-        newnode = (struct node*)malloc(sizeof(struct node));
-        printf("Enter data: ");
-        scanf("%d",&newnode->data);
-        newnode -> next = NULL;
-        if(start == NULL){
-            start = newnode;
-            temp = newnode;
-        }
-        else{
-            temp -> next = newnode;
-            temp = newnode;
-        }
-        printf("Do you want to enter more node: ");
-        scanf("%d",&choice);
-    }
-    temp = start;
-    while(temp!=NULL){
-        printf("Data : %d\n", temp->data);
-        temp = temp -> next;
-    }
-    printf("Enter data: ");
-    scanf("%d",&newnode -> data);
-    if(start->data>=newnode->data){
-        newnode -> next = start;
-        start = newnode;
-        return 0;
-       
-    }
-    
-     printf("before while start data: %d\n", start->data);
-    while(temp->next != NULL && temp ->next -> data <= newnode->data)
-        temp = temp -> next;
-        
-        newnode -> next = temp -> next;
-        temp -> next = newnode;
-    
-    printf("start data: %d\n", start->data);
-    temp = start;
-    while(temp!=NULL){
-        printf("Data after insertion: %d\n", temp->data);
-        temp = temp -> next;
-    }
-    
-    
-}
-
-
-
-
-/******************************************************************************
-
-                       
-*******************************************************************************/
+//Insertion In single sorted linked list in such a way the list remain sorted
 
 #include <stdio.h>
 #include <stdlib.h>
-struct node
-{
-	int data;
-	struct node* next;
+struct node {
+    int data;          // Data 
+    struct node *next; // Address 
 };
-
-void list(struct node** head, int data)//function to build linked list
-{
-	struct node* newNode = (struct node*)malloc(sizeof(struct node));
-	newNode->data = data;
-	newNode->next = *head;
-	*head = newNode;
-}
-void display(struct node* head)//function to print linked list
-{
-	struct node* ptr = head;
-	while (ptr)
-	{
-	     printf("%d  ",ptr->data);
-		ptr = ptr->next;
-	}
-}
-
-struct node* newNode(int data)
-{
-	struct node* newNode = (struct node*)malloc(sizeof(struct node));
-	newNode->data = data;
-	newNode->next = NULL;
-	return newNode;
-}
-
-void insertion_sort(struct node** head, struct node* newNode)//function to insert data in sorted position
-{
-	//If linked list is empty
-	if (*head == NULL || (*head)->data >= newNode->data)
-	{
-		newNode->next = *head;
-		*head = newNode;
-		return;
-	}
-
-	//Locate the node before insertion
-	struct node* current = *head;
-	while (current->next != NULL && current->next->data < newNode->data)
-		current = current->next;
-
-	newNode->next = current->next;
-	current->next = newNode;
-}
-
-int main(void)//main method
-{
-    int n,k;
-	printf("Enter the size of linked list :\n");
-	scanf("%d",&n);
-	int data[100];
-	printf("Enter linked list data in sorted order :\n");
-	for(int i=0;i<n;i++)
-	{
-	    scanf("%d",&data[i]);
-	}
-	
-	struct node* head = NULL;
+struct node *head;
+ struct node *newnode;
+struct node *temp;
+void insert();
+void main()
+{  
     
-	//constructing linked list
-	for (int i = n-1; i >= 0; i--)
-	list(&head, data[i]);
-	printf("Linked list before insertion : \n");
-    display(head);
-    printf("\nEnter data you want to insert: ");
-    scanf("%d",&k);
-	insertion_sort(&head, newNode(k));
-	printf("Linked list after insertion : ");
-	display(head);
+ int i=1; 
+ int n;
+ int choice=1;
+    head = (struct node *)malloc(sizeof(struct node));
+    if(head == NULL)
+    {
+        printf("Unable to allocate");
+        exit(0);
+    }
+     temp = head;
+    while(choice==1)
+    {
+        newnode = (struct node *)malloc(sizeof(struct node));
 
-	return 0;
+         if(newnode == NULL)
+        {
+            printf("Error");
+            break;
+        }
+
+        printf("data: %d: ", i);
+        scanf("%d", &newnode->data);
+
+        newnode->next = NULL; 
+        temp->next = newnode; 
+        temp = temp->next;  
+        i++;
+         printf("\nWant to add more nodes ");
+        scanf("%d", &choice);
+    }
+    
+    printf("\nData in the list \n");
+    temp = head;
+    while(temp != NULL)
+    {
+        printf("Data = %d\n", temp->data); 
+        temp = temp->next;                
+    }
+    
+      printf("\n insert in a sorted linked list \n");
+     
+       do 
+      {
+        insert();
+        printf("\nWant to enter insert more(press 1 or 0): ");
+        scanf("%d", &choice);
+      }while (choice == 1);
+      
+      printf("\nData in the list \n");
+    temp = head;
+    while(temp != NULL)
+    {
+        printf("Data = %d\n", temp->data); 
+        temp = temp->next; 
+       
+    }
+    
+    }
+    void insert(){
+    struct node *temp = NULL;
+    struct node *newnode;
+    
+   
+    {
+        newnode = (struct node *)malloc(sizeof(struct node));
+        printf("\nEnter data:");
+        scanf("%d", &newnode->data);
+       
+
+    
+   
+     if (head->data >= newnode->data)
+    {
+        newnode->next = head;
+        head = newnode;
+     
+    }
+    else{
+    temp=head;
+    while (temp->next->data <= newnode->data)
+    {
+        temp = temp->next;
+        
+    }
+    newnode->next = temp->next;
+    temp->next = newnode;
+    printf("Node Inserted!!");
+    }
+  }
 }
