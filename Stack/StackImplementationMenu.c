@@ -1,7 +1,8 @@
-//min and max are not done
+
 
 
 #include <stdio.h>
+#include<stdlib.h>
 int stack[50],choice,n,top=-1,i;
 void push();
 void pop();
@@ -10,13 +11,14 @@ void peek();
 void count();
 void search();
 void max();
+void min();
 int main()
 {
     
     printf("\n Enter the size of stack:");
     scanf("%d",&n);
     printf("\nEnter your choice");
-    printf("\n 1.Push\n 2.pop\n 3.Display\n 4.Peek\n 5.Count\n6.Search\n7.Find Max\n8.Exit");
+    printf("\n1.Push\n2.pop\n3.Display\n4.Peek\n5.Count\n6.Search\n7.Find Max\n8.Find Min\n9.Exit");
     do
     {
         printf("\n Enter the Choice:");
@@ -57,6 +59,15 @@ int main()
             {
                 max();
                 break;
+            }
+            case 8:
+            {
+                min();
+                break;
+            }
+            case 9:
+            {
+                exit(0);
             }
             default:
             {
@@ -110,6 +121,26 @@ void search(){
     }
 }
 void max(){
+    int i;
+    int max = stack[0];
+    for(i=0;i<n;i++){
+        if(stack[i]>max){
+            max = stack[i];
+        }
+    }
+    printf("Maximum Value in stack is : %d\n",max);
     
 }
-
+void min()
+{
+    int i;
+    int min = stack[0];
+    for (i = 0; i < n; i++)
+    {
+        if (stack[i] < min)
+        {
+            min = stack[i];
+        }
+    }
+    printf("Minimum Value in stack is : %d\n", min);
+}
