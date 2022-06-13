@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "d:/github repos/Data-Structures-using-C/Stack",
-      "program": "d:/github repos/Data-Structures-using-C/Stack/build/Debug/outDebug",
+      "cwd": "d:/github repos/Data-Structures-using-C/Queue",
+      "program": "d:/github repos/Data-Structures-using-C/Queue/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

@@ -5,7 +5,7 @@ struct node{
     int data;
     struct node *next;
 };
- struct node *f, *r = NULL;
+struct node *f, *r = NULL;
 void enqueue(){
    
     struct node *newnode;
