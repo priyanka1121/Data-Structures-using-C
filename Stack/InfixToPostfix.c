@@ -2,7 +2,6 @@
 /* This program converts infix expression to postfix expression.
 This program assume that there are Five operators: (*, /, +, -,^) 
 in infix expression and operands can be of single-digit only.*/
-/*ERROR: Not getting the output*/
 #include <stdio.h>
 #include <stdlib.h> 
 #include <ctype.h>  /* for isdigit(char ) */
