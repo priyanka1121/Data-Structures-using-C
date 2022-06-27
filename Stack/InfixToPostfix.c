@@ -4,128 +4,183 @@ This program assume that there are Five operators: (*, /, +, -,^)
 in infix expression and operands can be of single-digit only.*/
 /*ERROR: Not getting the output*/
 #include <stdio.h>
+#include <stdlib.h> 
+#include <ctype.h>  /* for isdigit(char ) */
 #include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
 
-char stack[50];
+#define n 100
+
+/* declared here as global variable because stack[] is used by more than one fucntions */
+char stack[n];
 int top = -1;
-int n;
-/*This will be the push function for the expression*/
-void push(char data){
-    if(top>=stack[n]){
-        printf("Stack overflow!!\n");
+
+/* define push operation */
+
+void push(char data)
+{
+    if (top >= n - 1)
+    {
+        printf("\nStack Overflow.");
     }
-    else{
-        top = top+1;
+    else
+    {
+        top = top + 1;
         stack[top] = data;
     }
 }
-/*Pop the stack*/
-char pop(){
+
+/* define pop operation */
+char pop()
+{
     char data;
-    if(top<0)
+
+    if (top < 0)
     {
-        printf("Stack Underflow!!\n");
-        exit(1);
+        printf("Stack underflow!!!\n");
+        /*getchar();*/
+        /* underflow may occur for invalid expression */
+        /* where ( and ) are not matched */
+        /*exit(1);*/
     }
-    else{
+    else
+    {
         data = stack[top];
-        top = top-1;
-        return(data);
+        top = top - 1;
+        return (data);
     }
 }
-/* define function that is used to determine whether any symbol is operator or not
-(that is symbol is operand) this fucntion returns 1 if symbol is opreator else return 0 */
 
-int chk_operator(char op){
-    if(op == "^" || op == "*" || op == "/" || op =="+" || op =="-"){
+/* define function that is used to determine whether any op is operator or not
+(that is op is operand)
+this fucntion returns 1 if op is opreator else return 0 */
+
+int chk_operator(char op)
+{
+    if (op == '^' || op == '*' || op == '/' || op == '+' || op == '-')
+    {
         return 1;
     }
-    else{return 0;}
-}
-
-/*Now a function to check or assign the precendance to operato*/
-
-int precendance(char op){
-    if(op == "^"){  //exponenet has higher precedence
-        return 3;
-    }
-    else if(op == "*"|| op=="/"){
-        return 2;
-    }
-    else if(op =="+"|| op =="-"){ //lowest precedence
-        return 1;
-    }
-    else{
-        return 0 ;
+    else
+    {
+        return 0;
     }
 }
 
-//Now the main conversion function
+/* define fucntion that is used to assign precendence to operator.Here ^ denotes exponent operator.
+  In this fucntion we assume that higher integer value
+  means higher precendence */
 
-void convert(char infix[], char postfix[] ){
-    int i,j;
+int precedence(char op)
+{
+    if (op == '^') /* exponent operator, highest precedence*/
+    {
+        return (3);
+    }
+    else if (op == '*' || op == '/')
+    {
+        return (2);
+    }
+    else if (op == '+' || op == '-') /* lowest precedence */
+    {
+        return (1);
+    }
+    else
+    {
+        return (0);
+    }
+}
+
+void InfixToPostfix(char infix[], char postfix[])
+{
+    int i, j;
     char data;
     char x;
-    push('(');   //push initial left paranthesis into the stack first
-    strcat(infix, ")");  //add ') in the end of the expression
 
-    //initializing the variables for loop
-    i,j=0;
-    data = infix[i];
+    push('(');              /* push '(' onto stack */
+    strcat(infix, ")"); /* add ')' to infix expression */
 
-    while(data != '\0'){
-        if(data == '('){
+    i = 0;
+    j = 0;
+    data = infix[i]; /* initialize before loop*/
+
+    while (data != '\0') /* run loop till end of infix expression */
+    {
+        if (data == '(')
+        {
             push(data);
         }
-        else if((isdigit(data) || isalpha(data))){
-            postfix[j] = data; /* add operand symbol to postfix expr */
+        else if (isdigit(data) || isalpha(data))
+        {
+            postfix[j] = data; /* add operand op to postfix expr */
             j++;
         }
-        else if (chk_operator(data) == 1)
+        else if (chk_operator(data) == 1) /* means op is operator */
         {
-            x=pop();
-            while(chk_operator(x) == 1 && precendance(x)>=precendance(data))
+            x = pop();
+            while (chk_operator(x) == 1 && precedence(x) >= precedence(data))
+            {
+                postfix[j] = x; /* so pop all higher precendence operator and */
+                j++;
+                x = pop(); /* add them to postfix expresion */
+            }
+            push(x);
+            /* because just above while loop will terminate we have
+            oppped one extra data
+            for which condition fails and loop terminates, so that one*/
+
+            push(data); /* push current oprerator op onto stack */
+        }
+        else if (data == ')') /* if current op is ')' then */
+        {
+            x = pop();       /* pop and keep popping until */
+            while (x != '(') /* '(' encounterd */
             {
                 postfix[j] = x;
                 j++;
-                x = pop(); /* because just above while loop will terminate we have oppped one extra item for which condition fails and loop terminates, so that one*/
-             }
-            push(x);
-            push(data);
-    }
-    else if(data == ')'){
-        x = pop();
-        while(x != '('){
-            postfix[j] = x;
-            j++;
-            x=pop();
+                x = pop();
+            }
         }
-    }
-    else{
-        printf("Invalid Infix Expression\n");
-        exit(1);
-    }
-    i++;
+        else
+        {                                            /* if current op is neither operand not '(' nor ')' and nor
+                                                       operator */
+            printf("\nInvalid infix Expression.\n"); /* the it is illegeal  op */
+            /*getchar();
+            exit(1);*/
+        }
+        i++;
 
-}
-if(top>0){
-    printf("Invalid infix expression\n");
-    exit(1);
-}
-if(top<0){
-    printf("Invalid infix expression\n");
-    exit(0);
-}
+        data = infix[i]; /* go to next op of infix expression */
+    }                        /* while loop ends here */
+    if (top > 0)
+    {
+        printf("\nInvalid infix Expression.\n"); /* the it is illegeal  op */
+        /*getchar();
+        exit(1);*/
+    }
+    if (top > 0)
+    {
+        printf("\nInvalid infix Expression.\n"); /* the it is illegeal  op */
+        /*getchar();
+        exit(1);*/
+    }
+
+    postfix[j] = '\0'; /* add sentinel else puts() fucntion */
+                           /* will print entire postfix[] array upto n */
 }
 
-int main(){
-    char infix[50],postfix[50];
-    printf("Enter infix expression: \n");
+/* main function begins */
+int main()
+{
+    char infix[n], postfix[n]; /* declare infix string and postfix string */
+
+    
+   
+    printf("\nEnter Infix expression : ");
     gets(infix);
-    convert(infix,postfix);
+
+    InfixToPostfix(infix, postfix); /* call to convert */
     printf("Postfix Expression: ");
-    puts(postfix);
+    puts(postfix); /* print postfix expression */
+
     return 0;
 }
